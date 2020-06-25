@@ -1,11 +1,14 @@
-Project Description
+# Project Description
 
 This repository corresponds to the work in our paper written by the following authors
+
 Title: Differentiable Programming for Hyperspectral Unmixing Using a Physics-based Dispersion Model
+
 Paper Authors: John Janiczek, Suren Jayasuriya, Gautam Dasarathy, Christopher Edwards, Phil Christensen
+
 Software written by: John Janiczek
 ________________________________________________________________________________________________________________________
-Abstract
+# Abstract
 Hyperspectral unmixing is an important remote sensing task with applications including material identification and
 analysis. Characteristic spectral features make many pure materials identifiable from their visible-to-infrared 
 spectra, but quantifying their presence within a mixture is a challenging task due to nonlinearities and factors of 
@@ -18,7 +21,7 @@ to enhance performance and speed when training data is available. Results achiev
 and visible-to-near-infrared (VNIR) datasets as compared to baselines, and show promise for the synergy between 
 physics-based models and deep learning in hyperspectral unmixing in the future.
 ________________________________________________________________________________________________________________________
-Acknowledgements
+# Acknowledgements
 This material is based upon work supported by the National Science Foundation under NSF IIS-1909192.
 The authors acknowledge Research Computing at Arizona State University for providing GPU resources 
 that have contributed to the research results reported within this paper. We would also like to acknowledge 
@@ -27,7 +30,7 @@ We would also like to thank Kim Murray (formerly Kim Feely) for providing the la
 contributing to this paper
 ________________________________________________________________________________________________________________________
 
-Installation Instructions:
+# Installation Instructions:
 1) Download github repository
 2) Install dependencies (virutal environment reccomended)
 -torch (version 1.0 used in development)
@@ -36,12 +39,14 @@ Installation Instructions:
 -pandas
 -h5py
 -matplotlib
+3) Run example code to test files
 ________________________________________________________________________________________________________________________
-Example Code
+# Example Code
 1) Run demo script for analysis by synthesis (optimization based) spectral unmixing with dispersion model in the loop
 - Average error for the Feely dataset will be print in output
 - Results will be stored in results/<todays date>/<test name>
 - Results include performance metrics in a csv file and predictions in a .hdf file
+  
 2) Run demo script for InfraRender (neural network based) spectral unmixing with dispersion model in the loop
 - Average error for the Feely dataset will be print in output
 - Results will be stored in results/<todays date>/<test name>
@@ -54,14 +59,10 @@ the dispersion parameters
 
 ________________________________________________________________________________________________________________________
 
-InfraRender Package (to generalize code for new experiemnts)
+# InfraRender Package
 
-The __init__.py file allows the following modules to be imported from the InfrarRender package
-AnalysisBySynthesis
-InverseRender
-DispersionModelEstimator
+The __init__.py file allows the following modules to be imported from the InfraRender package to generalize code to new experiments
 
-Usage of package modules:
 1) AnalysisBySynthesis(self, paramFile=None, wavenumbers=None, p=0.99, lam=0.001, dtype=torch.float64, device='cpu')
 - paramFile: path to dispersion model parameters
 - wavenumbers: torch vector of wavenumbers used in spectral analysis
