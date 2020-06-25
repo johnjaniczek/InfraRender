@@ -1,0 +1,2 @@
+,betas,epochs,eps_tol,freq_tol,gamma_tol,learningRate,min_endmemb,mode_weight_tol,model_file,p,p_lambda,rho_tol
+0,"(0.9, 0.999)",1,0.0001,0.01,0.005,0.01,0.05,0.0001,input/dispersionModelParameters/feely_params.hdf,0.95,0.0001,0.05

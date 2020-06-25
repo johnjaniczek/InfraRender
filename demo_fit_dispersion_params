@@ -1,0 +1,52 @@
+from util import EndmemberLibrary
+from InfraRender import DispersionModelEstimator
+from util import truncate_nonzero, get_next_index, cropFeelyEndmembers, create_result_directory
+import torch
+
+# search parameteres
+learning_rate_search = [1e-4, 5e-4, 5e-5]
+num_modes_search = [1, 2]
+num_freqs_search = [50, 75]
+betas_search = [(0.99, 0.999)]
+device = 'cpu'
+
+# output filename
+i = get_next_index('input/dispersionModelParameters/feely_params_demo', extension='.hdf')
+filename = 'input/dispersionModelParameters/feely_params_demo%d.hdf' % i
+result_path, today = create_result_directory()
+
+#import endmembers
+endmembs = EndmemberLibrary(ascii_spectra="input/endmember_libraries/kim_library_tab.txt",
+                            meta_csv="input/endmember_libraries/kim_library_meta.csv")
+cropFeelyEndmembers(endmembs)
+wavenumbers = torch.from_numpy(endmembs.bands[:])
+
+for i in range(len(endmembs.names)):
+    lowest_error = 10000
+    spectra = endmembs.spectra[:, i]
+    truncSpectra, truncWavenumbers = truncate_nonzero(spectra, wavenumbers)
+    name = endmembs.names[i]
+    print('\n', name, 'index:', i)
+
+    # grid search over hyperparameters
+
+    for learning_rate in learning_rate_search:
+        if lowest_error < 1e-5:
+            continue
+        for num_freqs in num_freqs_search:
+            if lowest_error < 1e-5:
+                continue
+            for num_modes in num_modes_search:
+                for betas in betas_search:
+
+                    # train model
+                    model = DispersionModelEstimator(truncWavenumbers, truncSpectra, learningRate=learning_rate,
+                                                     numModes=num_modes, numFreqs=num_freqs, betas=betas, device='cuda',
+                                                     rho_sparsity=1e-9)
+                    model.fit(epochs=20000, epsilon=1e-15, display_interval=50, prune_interval=5000,
+                              min_rho=1e-6, min_gamma=1e-5)
+                    if model.loss.item() < lowest_error:
+                        lowest_error = model.loss.item()
+                        model.dispersionModel.write_hdf(filename, modelName=name)
+
+    print("\n lowest error", lowest_error)
